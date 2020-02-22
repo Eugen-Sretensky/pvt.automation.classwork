@@ -1,29 +1,42 @@
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.junit.Assert;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import pages.LoginPage;
+import pages.MailboxPage;
 
 public class LoginPageTest {
-    private LoginPage loginPage;
-    private WebDriver driver;
+    private static LoginPage loginPage;
+    private static ChromeDriver driver;
+    private static MailboxPage mailboxHomePage;
 
-    @BeforeClass
-    public void before(){
-        System.setProperty("webdriver.chrome.driver", "D:\\students\\Java_Automation\\E.S\\chromedriver_win32\\chromedriver.exe");        WebDriver driver = new ChromeDriver();
+    @BeforeAll
+    public static void before() {
+        System.setProperty("webdriver.chrome.driver", "C:\\Study\\Java\\Java Automation (PVT)\\chromedriver_win32\\chromedriver.exe");
+        DesiredCapabilities capabilities = DesiredCapabilities.chrome();
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("incognito");
+        capabilities.setCapability(ChromeOptions.CAPABILITY, options);
+        driver = new ChromeDriver(capabilities);
+        driver.manage().window().maximize();
         driver.get("http://mail.ru");
         loginPage = new LoginPage(driver);
     }
+
     @Test
-    public void testLogin(){
+    public void testLogin() {
         loginPage.login("wane-bruce", "pvtautomation");
-        //......
-        //Assert.assertEquals("wane-bruce@mail.ru", );
+        mailboxHomePage = new MailboxPage(driver);
+        Assert.assertEquals("wane-bruce@mail.ru",mailboxHomePage.receiveAccountName());
     }
 
-    @AfterClass
-    public void after(){
+
+
+    @AfterAll
+    public static void after() {
         driver.close();
     }
 }

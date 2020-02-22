@@ -1,9 +1,9 @@
 package pages;
-
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.pagefactory.AjaxElementLocatorFactory;
 
 public class LoginPage {
     @FindBy(xpath = ".//input[@id=\"mailbox:login\"]")
@@ -15,11 +15,12 @@ public class LoginPage {
     @FindBy(xpath = ".//input[@id=\"mailbox:password\" and @class=\"input mailbox__input mailbox__input_password mailbox__rwd-control\"]")
     private WebElement passwordInput;
 
-    private WebDriver driver;
+    private ChromeDriver driver;
 
-    public LoginPage(WebDriver driver) {
+    public LoginPage(ChromeDriver driver) {
         this.driver = driver;
-        PageFactory.initElements(driver, this);
+        AjaxElementLocatorFactory factory = new AjaxElementLocatorFactory(driver,10);
+        PageFactory.initElements(factory, this);
     }
 
     public void login(String login, String password){
